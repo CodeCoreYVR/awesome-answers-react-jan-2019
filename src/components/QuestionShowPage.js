@@ -2,7 +2,9 @@ import React from "react";
 // const QuestionDetails = require("./QuestionDetails")
 import QuestionDetails from "./QuestionDetails";
 import AnswerDetails from "./AnswerDetails";
+import AnswerList from "./AnswerList";
 import "../styles/page.css";
+import oneQuestionData from "../oneQuestionData";
 
 // Composing components together
 // Demo: Question Show Page
@@ -19,21 +21,7 @@ function QuestionShowPage() {
         created_at={new Date()}
       />
       <h2>Answers</h2>
-      <AnswerDetails
-        body="Red."
-        author={{ full_name: "King Arthur" }}
-        created_at={new Date()}
-      />
-      <AnswerDetails
-        body="Blue."
-        author={{ full_name: "King Arthur" }}
-        created_at={new Date()}
-      />
-      <AnswerDetails
-        body="Green."
-        author={{ full_name: "King Arthur" }}
-        created_at={new Date()}
-      />
+      <AnswerList answers={oneQuestionData.answers} />
     </main>
   );
 }
