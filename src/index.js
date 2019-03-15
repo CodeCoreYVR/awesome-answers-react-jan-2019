@@ -7,16 +7,18 @@ import * as serviceWorker from "./serviceWorker";
 // Your React component's must the PascalCase naming convention.
 // Components whose names does not begin with a capital letter
 // will be interpreted as a plain HTML tag.
-function QuestionDetails() {
+function QuestionDetails(props) {
   return (
     <div>
-      <h2>What is your favourite colour?</h2>
+      <h2>{props.title}</h2>
       <p>
-        Red, green, blue, magenta, etc. <br />
-        By Bridge Troll
+        {props.body}
+        <br />
+        By {props.author.full_name}
       </p>
       <p>
-        <small>Seen 10 time(s)</small> – <small>Created 10 days ago</small>
+        <small>Seen {props.view_count} time(s)</small> –{" "}
+        <small>Created {props.created_at.toLocaleString()}</small>
       </p>
     </div>
   );
@@ -24,8 +26,11 @@ function QuestionDetails() {
 // In JSX, self-closing tags must be closed. <img> doesn't work, you
 // must write <img /> instead.
 
+// This function is a React Component
+// It is a function that returns a React Element
 function AnswerDetails() {
   return (
+    // Returns a React Element
     <div>
       <p>
         Red. <br />
@@ -36,7 +41,36 @@ function AnswerDetails() {
   );
 }
 
-ReactDOM.render(<AnswerDetails />, document.getElementById("root"));
+/* <h2>What is your favourite colour?</h2>
+<p>
+  Red, green, blue, magenta, etc. <br />
+  By Bridge Troll
+</p>
+<p>
+  <small>Seen 10 time(s)</small> – <small>Created 10 days ago</small>
+</p> */
+
+// Composing components together
+// Demo: Question Show Page
+function QuestionShowPage() {
+  return (
+    <main>
+      <QuestionDetails
+        title="What is your favourite colour?"
+        body="Red, green, blue, magenta, etc."
+        author={{ full_name: "Bridge Troll" }}
+        view_count={100}
+        created_at={new Date()}
+      />
+      <h2>Answers</h2>
+      <AnswerDetails />
+      <AnswerDetails />
+      <AnswerDetails />
+    </main>
+  );
+}
+
+ReactDOM.render(<QuestionShowPage />, document.getElementById("root"));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
