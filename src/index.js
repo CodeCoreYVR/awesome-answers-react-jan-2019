@@ -24,7 +24,19 @@ function QuestionDetails() {
 // In JSX, self-closing tags must be closed. <img> doesn't work, you
 // must write <img /> instead.
 
-ReactDOM.render(<QuestionDetails />, document.getElementById("root"));
+function AnswerDetails() {
+  return (
+    <div>
+      <p>
+        Red. <br />
+        By Ulises Wisozk
+      </p>
+      <p>Answered 2 days ago</p>
+    </div>
+  );
+}
+
+ReactDOM.render(<AnswerDetails />, document.getElementById("root"));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
