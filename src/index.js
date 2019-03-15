@@ -28,15 +28,16 @@ function QuestionDetails(props) {
 
 // This function is a React Component
 // It is a function that returns a React Element
-function AnswerDetails() {
+function AnswerDetails(props) {
   return (
     // Returns a React Element
     <div>
       <p>
-        Red. <br />
-        By Ulises Wisozk
+        {props.body}
+        <br />
+        By {props.author.full_name}
       </p>
-      <p>Answered 2 days ago</p>
+      <p>Answered at {props.created_at.toLocaleString()}</p>
     </div>
   );
 }
@@ -52,6 +53,8 @@ function AnswerDetails() {
 
 // Composing components together
 // Demo: Question Show Page
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date
+// https://date-fns.org/
 function QuestionShowPage() {
   return (
     <main>
@@ -63,9 +66,21 @@ function QuestionShowPage() {
         created_at={new Date()}
       />
       <h2>Answers</h2>
-      <AnswerDetails />
-      <AnswerDetails />
-      <AnswerDetails />
+      <AnswerDetails
+        body="Red."
+        author={{ full_name: "King Arthur" }}
+        created_at={new Date()}
+      />
+      <AnswerDetails
+        body="Blue."
+        author={{ full_name: "King Arthur" }}
+        created_at={new Date()}
+      />
+      <AnswerDetails
+        body="Green."
+        author={{ full_name: "King Arthur" }}
+        created_at={new Date()}
+      />
     </main>
   );
 }
