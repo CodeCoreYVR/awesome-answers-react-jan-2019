@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import DeleteButton from './DeleteButton';
 import questionsData from '../questionData';
 
 class QuestionIndexPage extends Component {
@@ -39,7 +38,9 @@ class QuestionIndexPage extends Component {
 		// It must return an object that will be merged with the state
 		this.setState((state, props) => {
 			return {
-				questions: state.questions.filter((q) => q.id !== id),
+				questions: state.questions.filter(
+					(question) => question.id !== id,
+				),
 			};
 		});
 
@@ -80,9 +81,6 @@ class QuestionIndexPage extends Component {
 								>
 									Delete
 								</button>
-								{/* 
-                  <DeleteButton onDeleteClick={() => this.deleteQuestion(question.id)} />
-                */}
 							</p>
 						</li>
 					))}

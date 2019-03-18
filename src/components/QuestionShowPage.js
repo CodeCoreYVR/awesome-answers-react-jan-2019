@@ -23,7 +23,21 @@ class QuestionShowPage extends Component {
       }
     */
 	}
+
+	deleteQuestion() {
+		this.setState({
+			question: null,
+		});
+	}
+
 	render() {
+		if (!this.state.question) {
+			return (
+				<main>
+					<h1>Question does not exist!</h1>
+				</main>
+			);
+		}
 		return (
 			<main>
 				<QuestionDetails
@@ -31,6 +45,9 @@ class QuestionShowPage extends Component {
 					// body={this.state.question.body}
 					{...this.state.question}
 				/>
+				<button onClick={() => this.deleteQuestion()}>
+					Delete Question
+				</button>
 				{/* {QuestionDetails({ ...this.state.question })} */}
 				<h2>Answers</h2>
 				<AnswerList answers={this.state.question.answers} />
