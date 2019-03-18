@@ -14,6 +14,14 @@ class QuestionShowPage extends Component {
 		this.state = {
 			question: { ...oneQuestionData },
 		};
+		/*
+    //  this.state is object
+      this.state === {
+        // it has a single property, question
+        // whose value is another object
+        question: { ... }
+      }
+    */
 	}
 	render() {
 		return (
