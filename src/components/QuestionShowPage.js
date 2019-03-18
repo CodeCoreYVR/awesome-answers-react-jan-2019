@@ -9,18 +9,23 @@ import oneQuestionData from '../oneQuestionData';
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date
 // https://date-fns.org/
 class QuestionShowPage extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			question: { ...oneQuestionData },
+		};
+	}
 	render() {
 		return (
 			<main>
 				<QuestionDetails
-					title="What is your favourite colour?"
-					body="Red, green, blue, magenta, etc."
-					author={{ full_name: 'Bridge Troll' }}
-					view_count={100}
-					created_at={new Date()}
+					// title={this.state.question.title}
+					// body={this.state.question.body}
+					{...this.state.question}
 				/>
+				{/* {QuestionDetails({ ...this.state.question })} */}
 				<h2>Answers</h2>
-				<AnswerList answers={oneQuestionData.answers} />
+				<AnswerList answers={this.state.question.answers} />
 			</main>
 		);
 	}
