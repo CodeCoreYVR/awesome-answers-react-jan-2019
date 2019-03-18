@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import NewQuestionForm from './NewQuestionForm';
 import questionsData from '../questionData';
 
 class QuestionIndexPage extends Component {
@@ -17,6 +18,8 @@ class QuestionIndexPage extends Component {
       whose value is an array
       this.state.questions is an array of questions
     */
+
+		this.createQuestion = this.createQuestion.bind(this);
 	}
 
 	deleteQuestion(id) {
@@ -48,6 +51,34 @@ class QuestionIndexPage extends Component {
 		// https://reactjs.org/docs/state-and-lifecycle.html#using-state-correctly
 	}
 
+	createQuestion(params) {
+		// update the list of questions within our state
+		// by adding a new question to that list
+		this.setState((state) => {
+			return {
+				questions: [
+					{
+						...params,
+						// Remember to include the current date
+						created_at: new Date(),
+						// and since there is no db yet,
+						// we need to generate ids for ourselves
+						// but this will be done by a db later
+						id:
+							Math.max(
+								...state.questions.map(
+									(question) => question.id,
+								),
+							) + 1,
+					},
+					// copy the previous list of questions from our state
+					// into this new array, following the newly created question
+					...state.questions,
+				],
+			};
+		});
+	}
+
 	render() {
 		const filteredQuestions = this.state.questions.filter((q, index) => {
 			if (this.props.showAll || index < 5) {
@@ -57,6 +88,7 @@ class QuestionIndexPage extends Component {
 		});
 		return (
 			<main>
+				<NewQuestionForm onSubmit={this.createQuestion} />
 				<h1>Questions</h1>
 				<ul>
 					{filteredQuestions.map((question) => (
