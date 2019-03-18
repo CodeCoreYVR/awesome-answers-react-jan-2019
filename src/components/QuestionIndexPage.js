@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import DeleteButton from './DeleteButton';
 import questionsData from '../questionData';
 
 class QuestionIndexPage extends Component {
@@ -18,12 +19,46 @@ class QuestionIndexPage extends Component {
       this.state.questions is an array of questions
     */
 	}
+
+	deleteQuestion(id) {
+		console.log('Deleting', id);
+		// console.log('this', this);
+
+		// To change `state`, you must ALWAYS use `this.setState(...)`
+
+		// You can use setState by passing an object to its first argument.
+		// When the time comes, the object will be merged with the current state.
+		// This will change whatever properties are within the current state
+
+		// this.setState({
+		// 	questions: this.state.questions.filter((q) => q.id !== id),
+		// });
+
+		// You can also use setState by giving a callback as a first argument
+		// that receives the current state and props as arguments.
+		// It must return an object that will be merged with the state
+		this.setState((state, props) => {
+			return {
+				questions: state.questions.filter((q) => q.id !== id),
+			};
+		});
+
+		// More on setState
+		// https://reactjs.org/docs/state-and-lifecycle.html#using-state-correctly
+	}
+
 	render() {
+		const filteredQuestions = this.state.questions.filter((q, index) => {
+			if (this.props.showAll || index < 5) {
+				return true;
+			}
+			return false;
+		});
 		return (
 			<main>
 				<h1>Questions</h1>
 				<ul>
-					{this.state.questions.map((question) => (
+					{filteredQuestions.map((question) => (
 						<li key={question.id}>
 							<p>
 								{question.title}
@@ -38,6 +73,16 @@ class QuestionIndexPage extends Component {
 										question.created_at,
 									).toLocaleString()}
 								</small>
+								<button
+									onClick={() =>
+										this.deleteQuestion(question.id)
+									}
+								>
+									Delete
+								</button>
+								{/* 
+                  <DeleteButton onDeleteClick={() => this.deleteQuestion(question.id)} />
+                */}
 							</p>
 						</li>
 					))}
