@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import NewQuestionForm from './NewQuestionForm';
+import CurrentDateTime from './CurrentDateTime';
 import questionsData from '../questionData';
 
 class QuestionIndexPage extends Component {
@@ -11,6 +12,9 @@ class QuestionIndexPage extends Component {
 			// of this component, as the state's question field
 			// questions: questionsData.map((question) => question),
 			questions: [...questionsData],
+			// This boolean is used to determine if we should display
+			// the CurrentDateTime component
+			shouldShowTime: true,
 		};
 		/*
       this.state is an object
@@ -88,6 +92,24 @@ class QuestionIndexPage extends Component {
 		});
 		return (
 			<main>
+				{/* 
+					The code below will conditionally render the CurrentDateTime component
+					based on some boolean value, `this.state.shouldShowTime`.
+					When `this.state.shouldShowTime` is true, React will render the component
+					and place it in the DOM.
+					When `this.state.shouldShowTime` is false, React will NOT render 
+					the component.
+					When updating `this.state.shouldShowTime`, React will either re-mount
+					the component if it was previously unmounted, or unmount the component
+					if it was previously mounted
+					
+					Currently, the only way we have to update this value is using the
+					React DevTools in the browser.
+					But theoretically this could have been updated by calling 
+					`this.setState` after some event occurs 
+					(i.e. clicking, hovering, typing, etc)
+				 */}
+				{this.state.shouldShowTime && <CurrentDateTime />}
 				<NewQuestionForm onSubmit={this.createQuestion} />
 				<h1>Questions</h1>
 				<ul>
