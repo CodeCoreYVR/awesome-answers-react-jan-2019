@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import NewQuestionForm from './NewQuestionForm';
+import { Link } from 'react-router-dom';
 
 import { Question } from '../requests';
 
@@ -105,8 +106,9 @@ class QuestionIndexPage extends Component {
 			);
 		}
 
+		const { showAll = true } = this.props;
 		const filteredQuestions = this.state.questions.filter((q, index) => {
-			if (this.props.showAll || index < 5) {
+			if (showAll || index < 5) {
 				return true;
 			}
 			return false;
@@ -119,7 +121,9 @@ class QuestionIndexPage extends Component {
 					{filteredQuestions.map((question) => (
 						<li key={question.id}>
 							<p>
-								{question.title}
+								<Link to={`/questions/${question.id}`}>
+									{question.title}
+								</Link>
 								<br />
 								<small>
 									Seen {question.view_count} time(s)

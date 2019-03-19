@@ -35,9 +35,22 @@ class QuestionShowPage extends Component {
 	}
 
 	componentDidMount() {
-		// Currently 110 is hard-coded, but we are legitimately
-		// fetching a real question with id 110 from the server
-		Question.one(110).then((question) => {
+		// All components that are rendered by a Route component (like this one)
+		// will be given props by that Route component
+		// One of these props, called match, contains information related to
+		// the pattern matched path defined in App.js
+		// <Route path="/questions/:id/:test/:blorg" component={QuestionShowPage} />
+		// match: {
+		// 	params: {
+		// 		id: <whatever-the-id-is>,
+		// 		test: <whatever-the-test-is>,
+		// 		blorg: <whatever-the-blorg-is>,
+		// 	}
+		// }
+		// Because the Route looked like the one above, the Route component
+		// pattern matched on the `:id`, and will give us a param called `id`
+		// within a property of `match` called `params`, as used below
+		Question.one(this.props.match.params.id).then((question) => {
 			this.setState({
 				question: question,
 				isLoading: false,
