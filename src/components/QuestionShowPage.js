@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import QuestionDetails from './QuestionDetails';
 import AnswerList from './AnswerList';
 import '../styles/page.css';
-import oneQuestionData from '../oneQuestionData';
+import { Question } from '../requests';
 
 // Composing components together
 // Demo: Question Show Page
@@ -12,7 +12,8 @@ class QuestionShowPage extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			question: { ...oneQuestionData },
+			question: null,
+			isLoading: true,
 		};
 		/*
     //  this.state is object
@@ -31,6 +32,17 @@ class QuestionShowPage extends Component {
 		// In this case, `this` within `deleteAnswer` will now always refer to the
 		// instance of the QuestionShowPage component
 		this.deleteAnswer = this.deleteAnswer.bind(this);
+	}
+
+	componentDidMount() {
+		// Currently 110 is hard-coded, but we are legitimately
+		// fetching a real question with id 110 from the server
+		Question.one(110).then((question) => {
+			this.setState({
+				question: question,
+				isLoading: false,
+			});
+		});
 	}
 
 	deleteQuestion() {
@@ -62,6 +74,13 @@ class QuestionShowPage extends Component {
 	}
 
 	render() {
+		if (this.state.isLoading) {
+			return (
+				<main>
+					<h3>Loading...</h3>
+				</main>
+			);
+		}
 		if (!this.state.question) {
 			return (
 				<main>
