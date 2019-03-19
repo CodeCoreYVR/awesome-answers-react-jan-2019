@@ -1,17 +1,23 @@
 import React, { Component } from 'react';
 import NewQuestionForm from './NewQuestionForm';
 import CurrentDateTime from './CurrentDateTime';
-import questionsData from '../questionData';
+
+import { Question } from '../requests';
 
 class QuestionIndexPage extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			// This copies the questionsData array of questions,
-			// into a new array that is stored in the state
-			// of this component, as the state's question field
-			// questions: questionsData.map((question) => question),
-			questions: [...questionsData],
+			// Initially the list of questions is empty until we fetch
+			// them from the server
+			questions: [],
+			// Initially, before we have fetched the questions
+			// from the server, we will display some loading
+			// indicator to the user
+			// but once we have fetched the questions, we will change
+			// the isLoading property to `false`,
+			// and display the regular list of questions
+			isLoading: true,
 			// This boolean is used to determine if we should display
 			// the CurrentDateTime component
 			shouldShowTime: true,
@@ -24,6 +30,17 @@ class QuestionIndexPage extends Component {
     */
 
 		this.createQuestion = this.createQuestion.bind(this);
+	}
+
+	componentDidMount() {
+		// When the QuestionIndexPage component is mounted,
+		// we will fetch all of the questions from the server
+		Question.all().then((questions) => {
+			this.setState({
+				questions: questions,
+				isLoading: false,
+			});
+		});
 	}
 
 	deleteQuestion(id) {
@@ -84,6 +101,14 @@ class QuestionIndexPage extends Component {
 	}
 
 	render() {
+		if (this.state.isLoading) {
+			return (
+				<main>
+					<h3>Loading...</h3>
+				</main>
+			);
+		}
+
 		const filteredQuestions = this.state.questions.filter((q, index) => {
 			if (this.props.showAll || index < 5) {
 				return true;
