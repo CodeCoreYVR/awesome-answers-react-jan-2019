@@ -4,7 +4,6 @@ import NavBar from "./NavBar";
 import QuestionIndexPage from "./QuestionIndexPage";
 import QuestionShowPage from "./QuestionShowPage";
 import SignInPage from "./SignInPage";
-import { Session } from "../requests";
 
 class App extends Component {
   constructor(props) {
@@ -14,20 +13,20 @@ class App extends Component {
     };
   }
 
-  componentDidMount() {
-    // This gives us a cookie that represents us being logged in
-    // Now, when we make POST requests to the server to make a Question
-    // we will be authorized/authenticated
-    // This is a HACKY method until we learn about Authentication in React
-    Session.create({
-      email: "js@winterfell.gov",
-      password: "supersecret"
-    }).then(user => {
-      this.setState({
-        currentUser: user
-      });
-    });
-  }
+  // componentDidMount() {
+  //   // This gives us a cookie that represents us being logged in
+  //   // Now, when we make POST requests to the server to make a Question
+  //   // we will be authorized/authenticated
+  //   // This is a HACKY method until we learn about Authentication in React
+  //   Session.create({
+  //     email: "js@winterfell.gov",
+  //     password: "supersecret"
+  //   }).then(user => {
+  //     this.setState({
+  //       currentUser: user
+  //     });
+  //   });
+  // }
 
   render() {
     return (
