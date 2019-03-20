@@ -41,6 +41,9 @@ class SignInPage extends Component {
 
         // Docs on props from <Route>:
         // https://reacttraining.com/react-router/web/api/history
+        if (typeof this.props.onSignIn === "function") {
+          this.props.onSignIn();
+        }
       }
     });
   }

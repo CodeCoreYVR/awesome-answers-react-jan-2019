@@ -3,6 +3,8 @@ import { NavLink /* Link */ } from "react-router-dom";
 import CurrentDateTime from "./CurrentDateTime";
 
 function NavBar(props) {
+  const { currentUser } = props;
+
   return (
     <nav
       style={{
@@ -13,7 +15,8 @@ function NavBar(props) {
     >
       {/* <a href="/questions">Questions</a> */}
       <NavLink to="/questions">Questions</NavLink>
-      <NavLink to="/sign_in">Sign In</NavLink>
+      {!currentUser && <NavLink to="/sign_in">Sign In</NavLink>}
+      {currentUser && <span>😎 {currentUser.full_name}</span>}
       <CurrentDateTime />
     </nav>
   );

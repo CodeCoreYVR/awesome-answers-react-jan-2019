@@ -4,31 +4,44 @@ import NavBar from "./NavBar";
 import QuestionIndexPage from "./QuestionIndexPage";
 import QuestionShowPage from "./QuestionShowPage";
 import SignInPage from "./SignInPage";
+import { User } from "../requests";
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentUser: null
+      currentUser: null,
+      loading: true
     };
+
+    this.getUser = this.getUser.bind(this);
   }
 
-  // componentDidMount() {
-  //   // This gives us a cookie that represents us being logged in
-  //   // Now, when we make POST requests to the server to make a Question
-  //   // we will be authorized/authenticated
-  //   // This is a HACKY method until we learn about Authentication in React
-  //   Session.create({
-  //     email: "js@winterfell.gov",
-  //     password: "supersecret"
-  //   }).then(user => {
-  //     this.setState({
-  //       currentUser: user
-  //     });
-  //   });
-  // }
+  getUser() {
+    User.current()
+      .then(data => {
+        if (typeof data.id !== "number") {
+          this.setState({ loading: false });
+        } else {
+          this.setState({ loading: false, currentUser: data });
+        }
+      })
+      .catch(() => {
+        this.setState({ loading: false });
+      });
+  }
+
+  componentDidMount() {
+    this.getUser();
+  }
 
   render() {
+    const { loading, currentUser } = this.state;
+
+    if (loading) {
+      return <div />;
+    }
+
     return (
       // We need to wrap all components that are imported from `react-router-dom`
       // inside of a `Router` component
@@ -37,7 +50,7 @@ class App extends Component {
       // any and all components that come with `react-router-dom`
       <BrowserRouter>
         <div>
-          <NavBar />
+          <NavBar currentUser={currentUser} />
           {/* 
 						Switch only allows for one Route component to render its
 						component prop.
@@ -65,7 +78,12 @@ class App extends Component {
 							component={QuestionNewPage}
 						/> */}
             <Route path="/questions/:id" component={QuestionShowPage} />
-            <Route path="/sign_in" component={SignInPage} />
+            <Route
+              path="/sign_in"
+              render={routeProps => (
+                <SignInPage onSignIn={this.getUser} {...routeProps} />
+              )}
+            />
           </Switch>
         </div>
       </BrowserRouter>
