@@ -6,6 +6,10 @@ class QuestionNewPage extends Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      errors: []
+    };
+
     //                            👇 The Prototype Method
     // 👇 The Instance Method
     this.createQuestion = this.createQuestion.bind(this);
@@ -14,7 +18,7 @@ class QuestionNewPage extends Component {
   createQuestion(params) {
     // When our new question form is submitted,
     // send the form data in a fetch request to the server
-    Question.create(params).then(question => {
+    Question.create(params).then(data => {
       // This is how you do navigation using react-router-dom
       // The `Route` component gives all components that it renders
       // (like this one) a prop named `history`
@@ -22,15 +26,25 @@ class QuestionNewPage extends Component {
       // the entire navigation history within the app
       // To navigate to a new path, we use the `push` method
       // to push a new path onto this history array-like thing
-      this.props.history.push(`/questions/${question.id}`);
+      if (data.errors) {
+        // console.log(data);
+
+        this.setState({
+          errors: data.errors
+        });
+      } else {
+        this.props.history.push(`/questions/${data.id}`);
+      }
     });
   }
 
   render() {
+    const { errors = [] } = this.state;
+
     return (
       <main>
         <h1>Ask a Question</h1>
-        <NewQuestionForm onSubmit={this.createQuestion} />
+        <NewQuestionForm errors={errors} onSubmit={this.createQuestion} />
       </main>
     );
   }
