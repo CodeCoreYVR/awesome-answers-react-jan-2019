@@ -1,141 +1,108 @@
-import React, { Component } from 'react';
-import NewQuestionForm from './NewQuestionForm';
-import { Link } from 'react-router-dom';
-
-import { Question } from '../requests';
+import { Link } from "react-router-dom";
+import { Question } from "../requests";
+import React, { Component } from "react";
 
 class QuestionIndexPage extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			// Initially the list of questions is empty until we fetch
-			// them from the server
-			questions: [],
-			// Initially, before we have fetched the questions
-			// from the server, we will display some loading
-			// indicator to the user
-			// but once we have fetched the questions, we will change
-			// the isLoading property to `false`,
-			// and display the regular list of questions
-			isLoading: true,
-		};
-		/*
+  constructor(props) {
+    super(props);
+    this.state = {
+      // Initially the list of questions is empty until we fetch
+      // them from the server
+      questions: [],
+      // Initially, before we have fetched the questions
+      // from the server, we will display some loading
+      // indicator to the user
+      // but once we have fetched the questions, we will change
+      // the isLoading property to `false`,
+      // and display the regular list of questions
+      isLoading: true
+    };
+    /*
       this.state is an object
       it has a single property, questions
       whose value is an array
       this.state.questions is an array of questions
     */
+  }
 
-		this.createQuestion = this.createQuestion.bind(this);
-	}
+  componentDidMount() {
+    // When the QuestionIndexPage component is mounted,
+    // we will fetch all of the questions from the server
+    Question.all().then(questions => {
+      this.setState({
+        questions: questions,
+        isLoading: false
+      });
+    });
+  }
 
-	componentDidMount() {
-		// When the QuestionIndexPage component is mounted,
-		// we will fetch all of the questions from the server
-		Question.all().then((questions) => {
-			this.setState({
-				questions: questions,
-				isLoading: false,
-			});
-		});
-	}
+  deleteQuestion(id) {
+    console.log("Deleting", id);
+    // console.log('this', this);
 
-	deleteQuestion(id) {
-		console.log('Deleting', id);
-		// console.log('this', this);
+    // To change `state`, you must ALWAYS use `this.setState(...)`
 
-		// To change `state`, you must ALWAYS use `this.setState(...)`
+    // You can use setState by passing an object to its first argument.
+    // When the time comes, the object will be merged with the current state.
+    // This will change whatever properties are within the current state
 
-		// You can use setState by passing an object to its first argument.
-		// When the time comes, the object will be merged with the current state.
-		// This will change whatever properties are within the current state
+    // this.setState({
+    // 	questions: this.state.questions.filter((q) => q.id !== id),
+    // });
 
-		// this.setState({
-		// 	questions: this.state.questions.filter((q) => q.id !== id),
-		// });
+    // You can also use setState by giving a callback as a first argument
+    // that receives the current state and props as arguments.
+    // It must return an object that will be merged with the state
+    this.setState((state, props) => {
+      return {
+        questions: state.questions.filter(question => question.id !== id)
+      };
+    });
 
-		// You can also use setState by giving a callback as a first argument
-		// that receives the current state and props as arguments.
-		// It must return an object that will be merged with the state
-		this.setState((state, props) => {
-			return {
-				questions: state.questions.filter(
-					(question) => question.id !== id,
-				),
-			};
-		});
+    // More on setState
+    // https://reactjs.org/docs/state-and-lifecycle.html#using-state-correctly
+  }
 
-		// More on setState
-		// https://reactjs.org/docs/state-and-lifecycle.html#using-state-correctly
-	}
+  render() {
+    if (this.state.isLoading) {
+      return (
+        <main>
+          <h3>Loading...</h3>
+        </main>
+      );
+    }
 
-	createQuestion(params) {
-		// When our new question form is submitted,
-		// send the form data in a fetch request to the server
-		Question.create(params).then((question) => {
-			// This is how you do navigation using react-router-dom
-			// The `Route` component gives all components that it renders
-			// (like this one) a prop named `history`
-			// This prop is an array-like structure that keeps track of
-			// the entire navigation history within the app
-			// To navigate to a new path, we use the `push` method
-			// to push a new path onto this history array-like thing
-			this.props.history.push(`/questions/${question.id}`);
-		});
-	}
-
-	render() {
-		if (this.state.isLoading) {
-			return (
-				<main>
-					<h3>Loading...</h3>
-				</main>
-			);
-		}
-
-		const { showAll = true } = this.props;
-		const filteredQuestions = this.state.questions.filter((q, index) => {
-			if (showAll || index < 5) {
-				return true;
-			}
-			return false;
-		});
-		return (
-			<main>
-				<h1>Questions</h1>
-				<NewQuestionForm onSubmit={this.createQuestion} />
-				<ul>
-					{filteredQuestions.map((question) => (
-						<li key={question.id}>
-							<p>
-								<Link to={`/questions/${question.id}`}>
-									{question.title}
-								</Link>
-								<br />
-								<small>
-									Seen {question.view_count} time(s)
-								</small>
-								{' – '}
-								<small>
-									Created at{' '}
-									{new Date(
-										question.created_at,
-									).toLocaleString()}
-								</small>
-								<button
-									onClick={() =>
-										this.deleteQuestion(question.id)
-									}
-								>
-									Delete
-								</button>
-							</p>
-						</li>
-					))}
-				</ul>
-			</main>
-		);
-	}
+    const { showAll = true } = this.props;
+    const filteredQuestions = this.state.questions.filter((q, index) => {
+      if (showAll || index < 5) {
+        return true;
+      }
+      return false;
+    });
+    return (
+      <main>
+        <h1>Questions</h1>
+        <ul>
+          {filteredQuestions.map(question => (
+            <li key={question.id}>
+              <p>
+                <Link to={`/questions/${question.id}`}>{question.title}</Link>
+                <br />
+                <small>Seen {question.view_count} time(s)</small>
+                {" – "}
+                <small>
+                  Created at {new Date(question.created_at).toLocaleString()}
+                </small>
+                <button onClick={() => this.deleteQuestion(question.id)}>
+                  Delete
+                </button>
+              </p>
+            </li>
+          ))}
+        </ul>
+      </main>
+    );
+  }
 }
 
 export default QuestionIndexPage;
