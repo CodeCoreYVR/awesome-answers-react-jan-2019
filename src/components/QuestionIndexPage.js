@@ -82,7 +82,7 @@ class QuestionIndexPage extends Component {
     return (
       <main>
         <h1>Questions</h1>
-        <ul>
+        <ul className="no-bullets">
           {filteredQuestions.map(question => (
             <li key={question.id}>
               <p>
@@ -93,9 +93,9 @@ class QuestionIndexPage extends Component {
                 <small>
                   Created at {new Date(question.created_at).toLocaleString()}
                 </small>
-                <button onClick={() => this.deleteQuestion(question.id)}>
+                {/* <button onClick={() => this.deleteQuestion(question.id)}>
                   Delete
-                </button>
+                </button> */}
               </p>
             </li>
           ))}
