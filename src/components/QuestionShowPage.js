@@ -1,8 +1,9 @@
-import React, { Component } from "react";
-import QuestionDetails from "./QuestionDetails";
-import AnswerList from "./AnswerList";
 import "../styles/page.css";
+import { Link } from "react-router-dom";
 import { Question } from "../requests";
+import AnswerList from "./AnswerList";
+import QuestionDetails from "./QuestionDetails";
+import React, { Component } from "react";
 
 // Composing components together
 // Demo: Question Show Page
@@ -59,14 +60,15 @@ class QuestionShowPage extends Component {
     });
   }
 
-  deleteQuestion() {
+  deleteQuestion(event) {
+    event.preventDefault();
+
     Question.delete(this.state.question.id).then(data => {
       this.props.history.push(`/questions`);
     });
   }
 
   deleteAnswer(answerId) {
-    console.log("this", this);
     this.setState(state => {
       return {
         // We can only change the `question` property of `this.state`
@@ -95,6 +97,7 @@ class QuestionShowPage extends Component {
         </main>
       );
     }
+
     if (!this.state.question) {
       return (
         <main>
@@ -103,15 +106,22 @@ class QuestionShowPage extends Component {
       );
     }
 
+    const { question } = this.state;
+
     return (
       <main>
-        <QuestionDetails {...this.state.question} />
-        <button onClick={this.deleteQuestion}>Delete</button>
+        <QuestionDetails {...question} />
+        <div>
+          <Link to={`/questions/${question.id}/edit`}>Edit</Link>{" "}
+          <a href="#" onClick={this.deleteQuestion}>
+            Delete
+          </a>
+        </div>
 
         <h2>Answers</h2>
 
         <AnswerList
-          answers={this.state.question.answers}
+          answers={question.answers}
           // This function calls the deleteAnswer method which
           // will remove that answer from the question state
           // It passes the method to its child component, AnswerList

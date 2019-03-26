@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Question } from "../requests";
-import NewQuestionForm from "./NewQuestionForm";
+import QuestionForm from "./QuestionForm";
 
 class QuestionNewPage extends Component {
   constructor(props) {
@@ -44,7 +44,7 @@ class QuestionNewPage extends Component {
     return (
       <main>
         <h1>Ask a Question</h1>
-        <NewQuestionForm errors={errors} onSubmit={this.createQuestion} />
+        <QuestionForm errors={errors} onSubmit={this.createQuestion} />
       </main>
     );
   }

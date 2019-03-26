@@ -4,6 +4,7 @@ import NavBar from "./NavBar";
 import QuestionIndexPage from "./QuestionIndexPage";
 import QuestionShowPage from "./QuestionShowPage";
 import QuestionNewPage from "./QuestionNewPage";
+import QuestionEditPage from "./QuestionEditPage";
 import SignInPage from "./SignInPage";
 import AuthRoute from "./AuthRoute";
 import { User, Session } from "../requests";
@@ -88,6 +89,11 @@ class App extends Component {
               isAuthenticated={currentUser}
               path="/questions/new"
               component={QuestionNewPage}
+            />
+            <AuthRoute
+              isAuthenticated={currentUser}
+              path="/questions/:id/edit"
+              component={QuestionEditPage}
             />
             {/* <AuthRoute
               isAuthenticated={currentUser}
